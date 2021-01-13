@@ -421,34 +421,34 @@ jobs:
       - revert-migrations
       - destroy-environment 
 
-  cleanup:
-    docker:
-      - image: amazon/aws-cli
-    steps:
-      - checkout
-      - run:
-          name: Install dependencies
-          command: |
-            yum -y install tar 
-            yum -y install gzip
-      - attach_workspace:
-          at: .circleci/ansible/
-      - run:
-          name: clean stacks
-          command: |
-            originalWorkflowID=`cat ./.circleci/ansible/originalWorkflowID.txt`
-            echo $originalWorkflowID
-            if [ -n "$originalWorkflowID" ]
-            then
-              aws s3 rm s3://udapeople-$originalWorkflowID --recursive
-              aws s3 rb s3://udapeople-$originalWorkflowID --force
-              aws cloudformation delete-stack --stack-name udapeople-frontend-$originalWorkflowID
-              aws cloudformation delete-stack --stack-name udapeople-backend-$originalWorkflowID
-            else
-              echo "No Stacks"
-            fi 
-      - revert-migrations
-      - destroy-environment
+  # cleanup:
+  #   docker:
+  #     - image: amazon/aws-cli
+  #   steps:
+  #     - checkout
+  #     - run:
+  #         name: Install dependencies
+  #         command: |
+  #           yum -y install tar 
+  #           yum -y install gzip
+  #     - attach_workspace:
+  #         at: .circleci/ansible/
+  #     - run:
+  #         name: clean stacks
+  #         command: |
+  #           originalWorkflowID=`cat ./.circleci/ansible/originalWorkflowID.txt`
+  #           echo $originalWorkflowID
+  #           if [ -n "$originalWorkflowID" ]
+  #           then
+  #             aws s3 rm s3://udapeople-$originalWorkflowID --recursive
+  #             aws s3 rb s3://udapeople-$originalWorkflowID --force
+  #             aws cloudformation delete-stack --stack-name udapeople-frontend-$originalWorkflowID
+  #             aws cloudformation delete-stack --stack-name udapeople-backend-$originalWorkflowID
+  #           else
+  #             echo "No Stacks"
+  #           fi 
+  #     - revert-migrations
+  #     - destroy-environment
 
 workflows:
   default:
